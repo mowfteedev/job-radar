@@ -1,6 +1,11 @@
 name: Automated Job Radar Pipeline & Pages CD
 
 on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - 'LICENSE'
   schedule:
     # 06:00 and 18:00 UTC+7 (which corresponds to 23:00 and 11:00 UTC)
     - cron: '0 23,11 * * *'
