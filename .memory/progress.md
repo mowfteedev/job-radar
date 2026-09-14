@@ -1,11 +1,11 @@
 # 📌 Bảng Tiến Độ & Bộ Nhớ Tác Chiến: vn-tech-job-radar
-*Cập nhật lần cuối: 2026-09-14 18:05*
+*Cập nhật lần cuối: 2026-09-14 18:25*
 
 ---
 
-## 🎯 Mục Tiêu Phiên Hiện Tại (Milestone 1)
-- **Giai đoạn**: Khởi tạo Kiến Trúc, ADR & Data Contracts (Công việc 1)
-- **Trọng tâm**: Thiết lập nền móng chuẩn mực cho toàn bộ hệ thống pipeline và kho dữ liệu tĩnh.
+## 🎯 Mục Tiêu Phiên Hiện Tại (Milestone 2)
+- **Giai đoạn**: Triển khai Scraper Adapters & Pipeline Ingestion (Công việc 2)
+- **Trọng tâm**: Xây dựng bộ cào bất đồng bộ đa nguồn, bộ điều phối pipeline, cơ chế chống sập (fault isolation), và kiểm thử thực chiến đạt chuẩn.
 
 ---
 
@@ -14,20 +14,20 @@
 | STT | Nhiệm vụ | Chuyên gia phụ trách | Trạng thái | Ghi chú & Tiêu chí đạt |
 |:---:|:---|:---:|:---:|:---|
 | **1** | Thiết lập cấu trúc Repo, ADR & Data Contracts | `@tech-lead` | 🟢 Đã xong | Đã lập ADR-0001, Pydantic `JobPost` / `RadarMetrics`, data seeds và test suite (7/7 pass). |
-| **2** | Xây dựng Scraper Adapters & Pipeline Ingestion | `@backend` | ⏳ Sẵn sàng làm | Triển khai `BaseScraper` cho các nguồn mục tiêu, crawl async httpx. |
-| **3** | Xây dựng Giao diện Web Radar (Astro + Tailwind) | `@frontend` | ⚪ Chờ duyệt | Mobile-First, lọc tức thì theo City/Role/Skill, dark mode radar. |
-| **4** | Tối ưu hóa Lưu trữ tĩnh & Index Tìm kiếm | `@database` | ⚪ Chờ duyệt | Giám sát kích thước `jobs.json`, benchmark tốc độ tìm kiếm. |
-| **5** | Rà soát Bảo mật, Rate-limiting & User-Agent | `@security` | ⚪ Chờ duyệt | Chống DoS, xoay tua User-Agent, bảo mật secrets. |
-| **6** | Thiết lập GitHub Actions Workflows & CD Pages | `@devops` | ⚪ Chờ duyệt | Cấu hình cronjob 2 lần/ngày, commit bot, deploy Pages. |
-| **7** | Viết Mock Fixtures & Kiểm thử Phá hoại | `@tester` | ⚪ Chờ duyệt | Mở rộng test suites, mock response khi sàn tuyển dụng đổi HTML. |
-| **8** | Review mã nguồn & Tối ưu hóa Clean Code | `@code-reviewer` | ⚪ Chờ duyệt | Kiểm tra quy chuẩn PEP8, type hints, triệt tiêu code rác. |
-| **9** | Viết README & Tài liệu Bàn giao | `@doc-writer` | ⚪ Chờ duyệt | Viết hướng dẫn đóng góp nguồn tuyển dụng mới. |
+| **2** | Xây dựng Scraper Adapters & Pipeline Ingestion | `@backend` | 🟢 Đã xong | Đã hoàn thành 3 Scraper Adapters (FPT, Viettel, Community), `JobRadarPipeline`, CLI entrypoint, đạt 19/19 tests pass. Đã được `@code-reviewer` và `@tester` nghiệm thu. |
+| **3** | Xây dựng Giao diện Web Radar (Astro + Tailwind) | `@frontend` | ⚪ Chờ duyệt | Chờ Bang chủ phê duyệt sau Công việc 2. |
+| **4** | Tối ưu hóa Lưu trữ tĩnh & Index Tìm kiếm | `@database` | ⚪ Chờ duyệt | Chờ Bang chủ phê duyệt. |
+| **5** | Rà soát Bảo mật, Rate-limiting & User-Agent | `@security` | ⚪ Chờ duyệt | Chờ Bang chủ phê duyệt. |
+| **6** | Thiết lập GitHub Actions Workflows & CD Pages | `@devops` | ⚪ Chờ duyệt | Chờ Bang chủ phê duyệt. |
+| **7** | Viết Mock Fixtures & Kiểm thử Phá hoại | `@tester` | 🟢 Đã hoàn thành (Ghép vào Task 2) | Đã hoàn thành 19 test cases bao gồm kiểm thử cô lập lỗi và tấn công biên (Adversarial Tests). |
+| **8** | Review mã nguồn & Tối ưu hóa Clean Code | `@code-reviewer` | 🟢 Đã hoàn thành (Ghép vào Task 2) | Đã rà soát 5 trụ cột, 0 Blocker, phê duyệt cho phép hòa nhập mã nguồn. |
+| **9** | Viết README & Tài liệu Bàn giao | `@doc-writer` | ⚪ Chờ duyệt | Chờ Bang chủ phê duyệt. |
 
 *Quy ước trạng thái*: 🟢 Đã xong | ⏳ Sẵn sàng làm | 🔴 Gặp lỗi/Blocker | ⚪ Chờ duyệt
 
 ---
 
 ## 🧠 Nhật Ký Quyết Định & Lưu Ý Bối Cảnh (Context Notes)
-- Đã xuất bản JSON Schema tại `data/schema_jobs.json` để Frontend hoặc bên thứ 3 có thể tự động validate dữ liệu.
-- Đã triển khai bộ test ban đầu tại `tests/` đạt 100% tỷ lệ pass (7/7 tests).
-- Giữ vững nguyên tắc chi phí 0 VNĐ và Serverless Architecture.
+- Đã triển khai cơ chế Graceful Degradation trong `JobRadarPipeline`: Lỗi từ 1 sàn tuyển dụng (WAF 403, 404, hoặc mạng timeout) không làm gián đoạn các nguồn khác; tự động kích hoạt verified domain fallback.
+- Ghi dữ liệu nguyên tử (Atomic Write): File `jobs.json` và `metrics.json` được ghi qua file tạm `.tmp` trước khi `replace` để chống hỏng file khi runner bị hủy ngang.
+- Tuyệt đối tuân thủ chỉ thị của Bang chủ: Chỉ dừng lại ở Công việc 2, không tự ý làm trước các công việc sau Công việc 2.
