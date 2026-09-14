@@ -1,0 +1,123 @@
+name: Automated Job Radar Pipeline & Pages CD
+
+on:
+  schedule:
+    # 06:00 and 18:00 UTC+7 (which corresponds to 23:00 and 11:00 UTC)
+    - cron: '0 23,11 * * *'
+  workflow_dispatch:
+    inputs:
+      force_scrape:
+        description: 'Force run all scrapers regardless of schedule'
+        required: false
+        default: 'true'
+        type: boolean
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages-deployment'
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    name: 🐍 Automated Ingestion & Data Sync
+    runs-on: ubuntu-latest
+    outputs:
+      has_changes: ${{ steps.git_check.outputs.has_changes }}
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: ⚙️ Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: 📦 Install Ingestion Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 🧪 Run Smoke Verification
+        run: |
+          pytest -v tests/test_scrapers.py tests/test_indexer.py
+
+      - name: 📡 Execute Scraper Ingestion Engine
+        run: |
+          python -m src.main --data-dir data --ttl 30
+
+      - name: 🔄 Sync Data to Web Public Directory
+        run: |
+          mkdir -p web/public/data
+          cp -f data/*.json web/public/data/
+
+      - name: 🔍 Check for Data Diffs
+        id: git_check
+        run: |
+          if [ -n "$(git status --porcelain data/ web/public/data/)" ]; then
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            echo "Detected updated data records."
+          else
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            echo "No data changes detected in this cycle."
+          fi
+
+      - name: 💾 Commit & Push Data Updates
+        if: steps.git_check.outputs.has_changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ web/public/data/
+          git commit -m "chore(data): automated radar jobs and metrics update [skip ci]"
+          git push origin main
+
+  build-and-deploy:
+    name: 🚀 Build & Deploy to GitHub Pages (0 Đồng)
+    needs: ingest
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: 'web/package-lock.json'
+
+      - name: 📦 Install Web Dependencies
+        run: |
+          npm --prefix web ci
+
+      - name: 🏗️ Build Static Site (Astro SSG)
+        run: |
+          npm --prefix web run build
+
+      - name: 🧐 Execute UI Test Quality Gate
+        run: |
+          npm --prefix web run test:ui
+
+      - name: 🌐 Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: 📦 Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'web/dist'
+
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
