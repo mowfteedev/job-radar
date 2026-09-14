@@ -1,0 +1,153 @@
+{
+  "last_updated": "2026-09-14T11:03:59.447628Z",
+  "total_active_jobs": 6,
+  "fresh_jobs_24h": 3,
+  "jobs_by_role": {
+    "network": 1,
+    "devops": 1,
+    "sysadmin": 1,
+    "helpdesk": 1,
+    "cloud": 1,
+    "security_soc": 1
+  },
+  "jobs_by_location": {
+    "ha_noi": 4,
+    "ho_chi_minh": 3,
+    "da_nang": 1,
+    "hybrid": 1
+  },
+  "top_skills": [
+    {
+      "skill": "Linux",
+      "count": 4,
+      "percentage": 66.7,
+      "category": "tech"
+    },
+    {
+      "skill": "TCP/IP",
+      "count": 3,
+      "percentage": 50.0,
+      "category": "tech"
+    },
+    {
+      "skill": "Python",
+      "count": 3,
+      "percentage": 50.0,
+      "category": "tech"
+    },
+    {
+      "skill": "Docker",
+      "count": 2,
+      "percentage": 33.3,
+      "category": "tech"
+    },
+    {
+      "skill": "Windows Server",
+      "count": 2,
+      "percentage": 33.3,
+      "category": "tech"
+    },
+    {
+      "skill": "Active Directory",
+      "count": 2,
+      "percentage": 33.3,
+      "category": "tech"
+    },
+    {
+      "skill": "CCNA",
+      "count": 1,
+      "percentage": 16.7,
+      "category": "tech"
+    },
+    {
+      "skill": "Cisco",
+      "count": 1,
+      "percentage": 16.7,
+      "category": "tech"
+    },
+    {
+      "skill": "Routing",
+      "count": 1,
+      "percentage": 16.7,
+      "category": "tech"
+    },
+    {
+      "skill": "Mikrotik",
+      "count": 1,
+      "percentage": 16.7,
+      "category": "tech"
+    },
+    {
+      "skill": "Kubernetes",
+      "count": 1,
+      "percentage": 16.7,
+      "category": "tech"
+    },
+    {
+      "skill": "CI/CD",
+      "count": 1,
+      "percentage": 16.7,
+      "category": "tech"
+    },
+    {
+      "skill": "GitLab CI",
+      "count": 1,
+      "percentage": 16.7,
+      "category": "tech"
+    },
+    {
+      "skill": "Ubuntu",
+      "count": 1,
+      "percentage": 16.7,
+      "category": "tech"
+    },
+    {
+      "skill": "VMware",
+      "count": 1,
+      "percentage": 16.7,
+      "category": "tech"
+    },
+    {
+      "skill": "Bash",
+      "count": 1,
+      "percentage": 16.7,
+      "category": "tech"
+    },
+    {
+      "skill": "LAN",
+      "count": 1,
+      "percentage": 16.7,
+      "category": "tech"
+    },
+    {
+      "skill": "WAN",
+      "count": 1,
+      "percentage": 16.7,
+      "category": "tech"
+    },
+    {
+      "skill": "DNS",
+      "count": 1,
+      "percentage": 16.7,
+      "category": "tech"
+    },
+    {
+      "skill": "AWS",
+      "count": 1,
+      "percentage": 16.7,
+      "category": "tech"
+    },
+    {
+      "skill": "Terraform",
+      "count": 1,
+      "percentage": 16.7,
+      "category": "tech"
+    },
+    {
+      "skill": "Network",
+      "count": 1,
+      "percentage": 16.7,
+      "category": "tech"
+    }
+  ]
+}

@@ -1,0 +1,253 @@
+[
+  {
+    "id": "fpt-noc-001",
+    "canonical_hash": "a43937e01f115f81",
+    "title": "Thực tập sinh Kỹ sư Mạng / NOC Network Engineer",
+    "company": {
+      "name": "FPT Telecom",
+      "normalized_name": "fpt telecom",
+      "logo_url": "https://fpt.vn/assets/frontend/images/logo.png",
+      "website": "https://fpt.vn",
+      "location": "ha_noi",
+      "address": "Tòa nhà FPT, Phố Duy Tân, Cầu Giấy, Hà Nội"
+    },
+    "role_category": "network",
+    "experience_level": "intern",
+    "skills": [
+      "CCNA",
+      "Cisco",
+      "Routing",
+      "TCP/IP",
+      "Mikrotik"
+    ],
+    "locations": [
+      "ha_noi",
+      "ho_chi_minh"
+    ],
+    "salary": {
+      "currency": "VND",
+      "min_amount": 3000000,
+      "max_amount": 6000000,
+      "is_negotiable": false,
+      "display_text": "3 - 6 triệu/tháng (Có trợ cấp)"
+    },
+    "source_url": "https://tuyendung.fpt.vn/job/thuc-tap-sinh-network-noc",
+    "source_platform": "FPT Careers",
+    "description_summary": "Tham gia vận hành giám sát hệ thống mạng trục backbone, xử lý sự cố routing switching cơ bản và học việc với các chuyên gia CCNA/CCNP.",
+    "posted_at": "2026-09-12T11:03:59.447628Z",
+    "scraped_at": "2026-09-14T11:03:59.447628Z",
+    "expires_at": null,
+    "status": "active",
+    "relevance_score": 95,
+    "work_type": "internship"
+  },
+  {
+    "id": "vng-devops-002",
+    "canonical_hash": "3e5cd5fd597c957c",
+    "title": "Fresher DevOps Engineer (Cloud & CI/CD)",
+    "company": {
+      "name": "VNG Corporation",
+      "normalized_name": "vng corporation",
+      "logo_url": "https://vng.com.vn/assets/images/logo-vng.svg",
+      "website": "https://vng.com.vn",
+      "location": "ho_chi_minh",
+      "address": "VNG Campus, Tân Thuận Đông, Quận 7, TP.HCM"
+    },
+    "role_category": "devops",
+    "experience_level": "fresher",
+    "skills": [
+      "Docker",
+      "Kubernetes",
+      "Linux",
+      "CI/CD",
+      "GitLab CI",
+      "Python"
+    ],
+    "locations": [
+      "ho_chi_minh"
+    ],
+    "salary": {
+      "currency": "VND",
+      "min_amount": 12000000,
+      "max_amount": 18000000,
+      "is_negotiable": false,
+      "display_text": "12 - 18 triệu/tháng"
+    },
+    "source_url": "https://careers.vng.com.vn/job/fresher-devops-engineer",
+    "source_platform": "VNG Careers",
+    "description_summary": "Xây dựng và tối ưu pipeline CI/CD, triển khai container hóa ứng dụng trên cụm Kubernetes và quản trị hạ tầng Linux.",
+    "posted_at": "2026-09-13T11:03:59.447628Z",
+    "scraped_at": "2026-09-14T11:03:59.447628Z",
+    "expires_at": null,
+    "status": "active",
+    "relevance_score": 98,
+    "work_type": "full_time"
+  },
+  {
+    "id": "cmc-sysadmin-003",
+    "canonical_hash": "504b90a432afe3ed",
+    "title": "Fresher Quản Trị Hệ Thống / System Administrator",
+    "company": {
+      "name": "CMC Telecom",
+      "normalized_name": "cmc telecom",
+      "logo_url": "https://cmctelecom.vn/wp-content/uploads/2021/04/logo-cmc.png",
+      "website": "https://cmctelecom.vn",
+      "location": "ha_noi",
+      "address": "Tòa nhà CMC, Duy Tân, Dịch Vọng Hậu, Cầu Giấy, Hà Nội"
+    },
+    "role_category": "sysadmin",
+    "experience_level": "fresher",
+    "skills": [
+      "Linux",
+      "Ubuntu",
+      "Windows Server",
+      "Active Directory",
+      "VMware",
+      "Bash"
+    ],
+    "locations": [
+      "ha_noi"
+    ],
+    "salary": {
+      "currency": "VND",
+      "min_amount": 8000000,
+      "max_amount": 13000000,
+      "is_negotiable": false,
+      "display_text": "8 - 13 triệu/tháng"
+    },
+    "source_url": "https://cmctelecom.vn/tuyen-dung/fresher-system-admin",
+    "source_platform": "CMC Careers",
+    "description_summary": "Quản trị hệ thống máy chủ Linux/Windows Server, giám sát dịch vụ ảo hóa VMware, quản lý tài khoản Active Directory.",
+    "posted_at": "2026-09-11T11:03:59.447628Z",
+    "scraped_at": "2026-09-14T11:03:59.447628Z",
+    "expires_at": null,
+    "status": "active",
+    "relevance_score": 90,
+    "work_type": "full_time"
+  },
+  {
+    "id": "viettel-helpdesk-004",
+    "canonical_hash": "404f082b42f4c6de",
+    "title": "Chuyên viên IT Support / Helpdesk Nội Bộ",
+    "company": {
+      "name": "Viettel IDC",
+      "normalized_name": "viettel idc",
+      "logo_url": "https://viettelidc.com.vn/images/logo.png",
+      "website": "https://viettelidc.com.vn",
+      "location": "ha_noi",
+      "address": "Số 1 Giang Văn Minh, Ba Đình, Hà Nội"
+    },
+    "role_category": "helpdesk",
+    "experience_level": "fresher",
+    "skills": [
+      "LAN",
+      "WAN",
+      "Active Directory",
+      "Windows Server",
+      "TCP/IP",
+      "DNS"
+    ],
+    "locations": [
+      "ha_noi",
+      "da_nang"
+    ],
+    "salary": {
+      "currency": "VND",
+      "min_amount": 9000000,
+      "max_amount": 14000000,
+      "is_negotiable": false,
+      "display_text": "9 - 14 triệu/tháng"
+    },
+    "source_url": "https://viettelidc.com.vn/tuyen-dung/it-support",
+    "source_platform": "Viettel Careers",
+    "description_summary": "Hỗ trợ kỹ thuật người dùng nội bộ, quản trị hệ thống mạng LAN/WLAN văn phòng, cấu hình cấp phát thiết bị và phân quyền thư mục.",
+    "posted_at": "2026-09-10T11:03:59.447628Z",
+    "scraped_at": "2026-09-14T11:03:59.447628Z",
+    "expires_at": null,
+    "status": "active",
+    "relevance_score": 88,
+    "work_type": "full_time"
+  },
+  {
+    "id": "momo-cloud-005",
+    "canonical_hash": "a5add6efb9b9c2ea",
+    "title": "Intern Cloud Engineer (AWS / GCP)",
+    "company": {
+      "name": "MoMo",
+      "normalized_name": "momo",
+      "logo_url": "https://momo.vn/favicon.ico",
+      "website": "https://momo.vn",
+      "location": "ho_chi_minh",
+      "address": "Phú Mỹ Hưng, Quận 7, TP.HCM"
+    },
+    "role_category": "cloud",
+    "experience_level": "intern",
+    "skills": [
+      "AWS",
+      "Terraform",
+      "Docker",
+      "Linux",
+      "Python"
+    ],
+    "locations": [
+      "ho_chi_minh",
+      "hybrid"
+    ],
+    "salary": {
+      "currency": "VND",
+      "min_amount": 5000000,
+      "max_amount": 8000000,
+      "is_negotiable": false,
+      "display_text": "5 - 8 triệu/tháng"
+    },
+    "source_url": "https://careers.momo.vn/job/intern-cloud-engineer",
+    "source_platform": "MoMo Careers",
+    "description_summary": "Tham gia quản trị tài nguyên Cloud AWS, học cách viết kịch bản Infrastructure as Code với Terraform và tối ưu chi phí cloud.",
+    "posted_at": "2026-09-13T17:03:59.447628Z",
+    "scraped_at": "2026-09-14T11:03:59.447628Z",
+    "expires_at": null,
+    "status": "active",
+    "relevance_score": 94,
+    "work_type": "internship"
+  },
+  {
+    "id": "vnpt-soc-006",
+    "canonical_hash": "e2221d1675874bb8",
+    "title": "Thực tập sinh Giám sát An toàn Thông tin (SOC Tier 1)",
+    "company": {
+      "name": "VNPT-IT",
+      "normalized_name": "vnptit",
+      "logo_url": "https://vnpt.com.vn/images/logo.png",
+      "website": "https://vnpt.com.vn",
+      "location": "ha_noi",
+      "address": "57 Huỳnh Thúc Kháng, Đống Đa, Hà Nội"
+    },
+    "role_category": "security_soc",
+    "experience_level": "intern",
+    "skills": [
+      "Linux",
+      "TCP/IP",
+      "Network",
+      "Python"
+    ],
+    "locations": [
+      "ha_noi"
+    ],
+    "salary": {
+      "currency": "VND",
+      "min_amount": 4000000,
+      "max_amount": 7000000,
+      "is_negotiable": false,
+      "display_text": "4 - 7 triệu/tháng"
+    },
+    "source_url": "https://vnpt.com.vn/tuyen-dung/intern-soc",
+    "source_platform": "VNPT Careers",
+    "description_summary": "Trực giám sát cảnh báo bảo mật trên hệ thống SIEM, phân tích nhật ký log mạng và lập báo cáo sự cố an ninh sơ bộ.",
+    "posted_at": "2026-09-14T01:03:59.447628Z",
+    "scraped_at": "2026-09-14T11:03:59.447628Z",
+    "expires_at": null,
+    "status": "active",
+    "relevance_score": 92,
+    "work_type": "internship"
+  }
+]
