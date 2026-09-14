@@ -6,6 +6,7 @@ from src.processors.classifier import (
     extract_skills,
 )
 from src.processors.dedupe import DeduplicationProcessor
+from src.processors.indexer import JobSearchIndexer
 
 __all__ = [
     "classify_role",
@@ -13,4 +14,5 @@ __all__ = [
     "extract_skills",
     "detect_locations",
     "DeduplicationProcessor",
+    "JobSearchIndexer",
 ]

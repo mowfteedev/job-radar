@@ -16,6 +16,7 @@ from schemas.job import (
     SkillFrequency,
 )
 from src.processors.dedupe import DeduplicationProcessor
+from src.processors.indexer import JobSearchIndexer
 from src.scrapers.base import BaseScraper
 from src.scrapers.community_tech import CommunityTechScraper
 from src.scrapers.fpt_telecom import FPTTelecomScraper
@@ -52,6 +53,7 @@ class JobRadarPipeline:
         self.ttl_days = ttl_days
         self.jobs_file = self.data_dir / "jobs.json"
         self.metrics_file = self.data_dir / "metrics.json"
+        self.index_file = self.data_dir / "search_index.json"
 
         # Default registered scraper suite
         self.scrapers = scrapers or [
@@ -123,6 +125,9 @@ class JobRadarPipeline:
         # Compute & persist updated Radar Metrics
         self._compute_and_save_metrics(active_jobs)
 
+        # Compile & persist static inverted search index
+        self._compile_and_save_index(active_jobs)
+
         duration = (datetime.now(timezone.utc) - start_time).total_seconds()
         telemetry.duration_seconds = round(duration, 2)
         logger.info(
@@ -187,3 +192,8 @@ class JobRadarPipeline:
             json.dump(metrics.model_dump(mode="json"), f, indent=2, ensure_ascii=False)
         temp_metrics.replace(self.metrics_file)
         logger.info(f"Updated Radar Metrics saved to {self.metrics_file}.")
+
+    def _compile_and_save_index(self, jobs: List[JobPost]) -> None:
+        """Compiles and atomically saves static inverted index for fast client query."""
+        indexer = JobSearchIndexer(jobs)
+        indexer.save_index(self.index_file)
