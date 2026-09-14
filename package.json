@@ -6,6 +6,6 @@
     "web:dev": "npm --prefix web run dev",
     "web:build": "npm --prefix web run build",
     "web:preview": "npm --prefix web run preview",
-    "web:test": "npm --prefix web run test:ui"
+    "web:test": "npm --prefix web run test:ui && npm --prefix web run test:adversarial"
   }
 }

@@ -18,7 +18,7 @@ class DeduplicationProcessor:
         self.jobs_by_hash: Dict[str, JobPost] = {job.canonical_hash: job for job in existing_jobs}
 
     def process_incoming(self, incoming_jobs: List[JobPost]) -> Tuple[List[JobPost], int, int]:
-        """Merges incoming jobs with existing storage.
+        """Merges incoming jobs with existing storage immutably.
         
         Returns:
             Tuple of (merged_active_jobs, new_count, updated_count)
@@ -30,28 +30,35 @@ class DeduplicationProcessor:
         for inc in incoming_jobs:
             h = inc.canonical_hash
             if h in self.jobs_by_hash:
-                # Update scraped_at and keep active
+                # Refresh metadata immutably
                 existing = self.jobs_by_hash[h]
-                existing.scraped_at = now
-                existing.status = JobStatus.ACTIVE
-                # Refresh description if incoming is richer
-                if len(inc.description_summary) > len(existing.description_summary):
-                    existing.description_summary = inc.description_summary
+                desc = (
+                    inc.description_summary
+                    if len(inc.description_summary) > len(existing.description_summary)
+                    else existing.description_summary
+                )
+                self.jobs_by_hash[h] = existing.model_copy(
+                    update={
+                        "scraped_at": now,
+                        "status": JobStatus.ACTIVE,
+                        "description_summary": desc,
+                    }
+                )
                 updated_count += 1
             else:
                 # Brand new job
                 self.jobs_by_hash[h] = inc
                 new_count += 1
 
-        # Check TTL and purge expired jobs
-        active_jobs = []
+        # Reconcile TTL and filter active jobs
+        active_jobs: List[JobPost] = []
         for h, job in self.jobs_by_hash.items():
             age_days = (now - job.posted_at).total_seconds() / 86400.0
             if age_days > self.ttl_days:
-                job.status = JobStatus.EXPIRED
-            else:
-                active_jobs.append(job)
+                self.jobs_by_hash[h] = job.model_copy(update={"status": JobStatus.EXPIRED})
+                continue
+            active_jobs.append(job)
 
-        # Sort descending by posted_at
+        # Sort descending by publication date
         active_jobs.sort(key=lambda j: j.posted_at, reverse=True)
         return active_jobs, new_count, updated_count

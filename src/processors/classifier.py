@@ -34,7 +34,9 @@ ROLE_KEYWORDS = {
 # Negative keywords indicating seniority (should be filtered out for Fresher radar)
 SENIOR_BLACKLIST = [
     r"\bsenior\b", r"\blead\b", r"\bprincipal\b", r"\bmanager\b", r"\btrưởng nhóm\b",
-    r"\btrưởng phòng\b", r"\bchuyên gia\b", r"\barchitect\b",
+    r"\btrưởng phòng\b", r"\btrưởng bộ phận\b", r"\bchuyên gia\b", r"\barchitect\b",
+    r"\bdirector\b", r"\bgiám đốc\b", r"\bvice president\b", r"\bvp\b", r"\bhead of\b",
+    r"\bquản lý\b",
     r"3\s*-\s*5\s*năm", r"3\+\s*năm", r"4\+\s*năm", r"5\+\s*năm",
     r"3\s*-\s*5\s*years", r"3\+\s*years", r"4\+\s*years", r"5\+\s*years"
 ]
@@ -115,18 +117,19 @@ def extract_skills(text: str) -> List[str]:
 
 
 def detect_locations(text: str) -> List[LocationCategory]:
-    """Detects city locations from job text."""
-    locs = []
+    """Detects normalized workplace locations from job text with word-boundary accuracy."""
+    locs: List[LocationCategory] = []
     text_lower = text.lower()
-    if any(k in text_lower for k in ["hà nội", "ha noi", "hn"]):
+
+    if re.search(r"\b(hà nội|ha noi|hn)\b", text_lower):
         locs.append(LocationCategory.HA_NOI)
-    if any(k in text_lower for k in ["hồ chí minh", "ho chi minh", "hcm", "sài gòn", "tphcm"]):
+    if re.search(r"\b(hồ chí minh|ho chi minh|hcm|sài gòn|sai gon|tphcm)\b", text_lower):
         locs.append(LocationCategory.HO_CHI_MINH)
-    if any(k in text_lower for k in ["đà nẵng", "da nang", "đn"]):
+    if re.search(r"\b(đà nẵng|da nang|đn|dn)\b", text_lower):
         locs.append(LocationCategory.DA_NANG)
-    if any(k in text_lower for k in ["remote", "từ xa", "làm việc tại nhà"]):
+    if re.search(r"\b(remote|từ xa|tu xa|làm việc tại nhà|lam viec tai nha)\b", text_lower):
         locs.append(LocationCategory.REMOTE)
-    
+
     if not locs:
         locs.append(LocationCategory.OTHER)
     return locs

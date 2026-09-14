@@ -63,8 +63,8 @@ def validate_and_sanitize_url(raw_url: str) -> Optional[str]:
             if ip in net:
                 return None
     except ValueError:
-        # Not a raw IP (standard domain name) - allowed
-        pass
+        # Hostname is a standard FQDN domain string, not a numerical IP literal
+        hostname_is_ip = False
 
     return cleaned_url
 

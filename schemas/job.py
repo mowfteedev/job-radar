@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
 from typing import Dict, List, Optional
-from pydantic import BaseModel, Field, HttpUrl, field_validator
+from pydantic import BaseModel, Field, HttpUrl, field_validator, model_validator
 
 
 class RoleCategory(str, Enum):
@@ -56,10 +56,20 @@ class WorkType(str, Enum):
 class SalaryInfo(BaseModel):
     """Standardized salary information."""
     currency: str = Field(default="VND", description="Currency code (VND, USD)")
-    min_amount: Optional[int] = Field(default=None, description="Minimum salary amount")
-    max_amount: Optional[int] = Field(default=None, description="Maximum salary amount")
+    min_amount: Optional[int] = Field(default=None, ge=0, description="Minimum salary amount")
+    max_amount: Optional[int] = Field(default=None, ge=0, description="Maximum salary amount")
     is_negotiable: bool = Field(default=True, description="True if salary is negotiable or undisclosed")
     display_text: str = Field(default="Thỏa thuận", description="Human-friendly salary display string")
+
+    @model_validator(mode="after")
+    def validate_salary_bounds(self) -> SalaryInfo:
+        """Ensures min_amount <= max_amount when both are defined."""
+        if self.min_amount is not None and self.max_amount is not None:
+            if self.min_amount > self.max_amount:
+                raise ValueError(
+                    f"min_amount ({self.min_amount}) cannot exceed max_amount ({self.max_amount})"
+                )
+        return self
 
 
 class CompanyInfo(BaseModel):

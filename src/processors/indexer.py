@@ -92,7 +92,7 @@ class JobSearchIndexer:
     def _tokenize(self, text: str) -> Set[str]:
         """Extracts search tokens (3+ alphanumeric characters), removing common stop words."""
         stop_words = {
-            "and", "the", "for", "with", "của", "và", "cho", "các", "các", "tại",
+            "and", "the", "for", "with", "của", "và", "cho", "các", "tại",
             "trong", "về", "khi", "được", "yêu", "cầu", "với", "tuyển", "dụng",
             "công", "ty", "việc", "làm", "nhân", "viên"
         }
