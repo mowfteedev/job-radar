@@ -1,0 +1,47 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "VN Tech Job Radar - Cổng Tuyển Dụng Thực Tập & Fresher Network, DevOps, IT Support",
+  description = "Pipeline tự động thu thập và sàng lọc tin tuyển dụng Thực tập sinh / Fresher ngành Mạng, IT Helpdesk, SysAdmin và Cloud/DevOps tại Việt Nam. Cập nhật 2 lần/ngày, lọc trùng thông minh, chi phí 0đ."
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="vi" class="dark scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2310b981'><circle cx='12' cy='12' r='10' stroke='%2306b6d4' stroke-width='2' fill='none'/><circle cx='12' cy='12' r='4' fill='%2310b981'/><path d='M12 2a10 10 0 0 1 10 10' stroke='%2310b981' stroke-width='2'/></svg>" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content="tuyển dụng IT, fresher devops, thực tập sinh network, sysadmin fresher, it helpdesk, ccna, docker, linux, việc làm IT việt nam" />
+    <meta name="author" content="mowftee-guild" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-[#090d16] text-slate-100 antialiased selection:bg-emerald-500 selection:text-slate-950 flex flex-col min-h-screen">
+    <slot />
+  </body>
+</html>

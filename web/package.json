@@ -1,0 +1,19 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "description": "Frontend for VN Tech Job Radar",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test:ui": "node test-ui.mjs"
+  },
+  "keywords": [],
+  "type": "module",
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.2",
+    "fuse.js": "^7.5.0",
+    "tailwindcss": "^4.3.3"
+  }
+}

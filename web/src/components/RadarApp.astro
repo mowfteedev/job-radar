@@ -1,0 +1,514 @@
+---
+import type { JobPost } from '../types/job';
+
+interface Props {
+  initialJobs: JobPost[];
+}
+
+const { initialJobs = [] } = Astro.props;
+---
+
+<div id="radar-app" data-initial-jobs={JSON.stringify(initialJobs)} class="w-full">
+  <!-- Search & Filter Controls Toolbar -->
+  <div class="p-4 sm:p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-xl mb-6 backdrop-blur-sm">
+    <!-- Top Row: Search Input & Sort Selection -->
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-4">
+      <div class="relative flex-1">
+        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        <input
+          type="text"
+          id="radar-search-input"
+          placeholder="Tìm theo chức danh, công ty hoặc kỹ năng (VD: CCNA, Docker, Linux, FPT...)"
+          class="w-full pl-10 pr-10 py-3 bg-slate-950/80 border border-slate-700/80 rounded-xl text-sm text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent min-h-[44px] transition-all"
+        />
+        <button
+          type="button"
+          id="clear-search-btn"
+          class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white"
+          aria-label="Clear search"
+        >
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <label for="sort-select" class="text-xs text-slate-400 font-mono hidden sm:inline">Sắp xếp:</label>
+        <select
+          id="sort-select"
+          class="px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 min-h-[44px]"
+        >
+          <option value="relevance">Điểm phù hợp cao nhất</option>
+          <option value="newest">Tin mới nhất</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Filter Group 1: Role Specializations -->
+    <div class="mb-3">
+      <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+        <span>Khu vực chuyên môn:</span>
+      </div>
+      <div class="flex flex-wrap gap-1.5 sm:gap-2" id="role-filters">
+        <button type="button" data-role="all" class="filter-pill active px-3 py-1.5 rounded-lg text-xs font-medium bg-emerald-500 text-slate-950 min-h-[38px] transition-all">Tất Cả</button>
+        <button type="button" data-role="network" class="filter-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 min-h-[38px] transition-all">📡 Kỹ Sư Mạng (Network)</button>
+        <button type="button" data-role="helpdesk" class="filter-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 min-h-[38px] transition-all">🛠️ IT Helpdesk & Support</button>
+        <button type="button" data-role="sysadmin" class="filter-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 min-h-[38px] transition-all">🖥️ SysAdmin (Linux/Windows)</button>
+        <button type="button" data-role="devops" class="filter-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 min-h-[38px] transition-all">☁️ DevOps & SRE</button>
+        <button type="button" data-role="cloud" class="filter-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 min-h-[38px] transition-all">🌩️ Cloud Engineer</button>
+        <button type="button" data-role="security_soc" class="filter-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 min-h-[38px] transition-all">🔒 An Ninh Mạng (SOC)</button>
+      </div>
+    </div>
+
+    <!-- Filter Group 2: Location & Level -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-slate-800/80">
+      <div class="flex flex-wrap items-center gap-1.5" id="location-filters">
+        <span class="text-[11px] font-mono text-slate-400 mr-1">Địa điểm:</span>
+        <button type="button" data-loc="all" class="filter-loc-pill active px-2.5 py-1 rounded-md text-xs bg-slate-700 text-white min-h-[32px]">Tất cả</button>
+        <button type="button" data-loc="ha_noi" class="filter-loc-pill px-2.5 py-1 rounded-md text-xs bg-slate-800/80 text-slate-300 hover:bg-slate-700 min-h-[32px]">Hà Nội</button>
+        <button type="button" data-loc="ho_chi_minh" class="filter-loc-pill px-2.5 py-1 rounded-md text-xs bg-slate-800/80 text-slate-300 hover:bg-slate-700 min-h-[32px]">TP. Hồ Chí Minh</button>
+        <button type="button" data-loc="da_nang" class="filter-loc-pill px-2.5 py-1 rounded-md text-xs bg-slate-800/80 text-slate-300 hover:bg-slate-700 min-h-[32px]">Đà Nẵng</button>
+        <button type="button" data-loc="remote" class="filter-loc-pill px-2.5 py-1 rounded-md text-xs bg-slate-800/80 text-slate-300 hover:bg-slate-700 min-h-[32px]">Remote</button>
+      </div>
+
+      <div class="flex items-center gap-2" id="level-filters">
+        <span class="text-[11px] font-mono text-slate-400">Cấp độ:</span>
+        <button type="button" data-level="all" class="filter-lvl-pill active text-xs font-mono text-emerald-400 underline min-h-[32px]">Tất cả</button>
+        <button type="button" data-level="intern" class="filter-lvl-pill text-xs font-mono text-slate-400 hover:text-white min-h-[32px]">Intern</button>
+        <button type="button" data-level="fresher" class="filter-lvl-pill text-xs font-mono text-slate-400 hover:text-white min-h-[32px]">Fresher</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Results Header & Active Counter -->
+  <div class="flex items-center justify-between mb-4 px-1">
+    <div class="flex items-center gap-2">
+      <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+      <h2 class="text-sm font-semibold text-slate-200">
+        Kết Quả Radar Tuyển Dụng: <span id="results-count" class="font-mono text-emerald-400 font-bold">{initialJobs.length}</span> vị trí
+      </h2>
+    </div>
+
+    <button
+      type="button"
+      id="reset-all-filters-btn"
+      class="text-xs text-slate-400 hover:text-rose-400 flex items-center gap-1 transition-colors min-h-[36px]"
+    >
+      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      </svg>
+      <span>Đặt lại bộ lọc</span>
+    </button>
+  </div>
+
+  <!-- 4 Crucial State Containers -->
+  
+  <!-- State 1: Skeleton Loading Container -->
+  <div id="loading-state" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="p-5 rounded-xl bg-slate-900/40 border border-slate-800 animate-pulse">
+      <div class="h-4 bg-slate-800 rounded w-3/4 mb-3"></div>
+      <div class="h-3 bg-slate-800 rounded w-1/2 mb-4"></div>
+      <div class="h-16 bg-slate-800/60 rounded mb-4"></div>
+      <div class="h-8 bg-slate-800 rounded w-1/3"></div>
+    </div>
+    <div class="p-5 rounded-xl bg-slate-900/40 border border-slate-800 animate-pulse">
+      <div class="h-4 bg-slate-800 rounded w-3/4 mb-3"></div>
+      <div class="h-3 bg-slate-800 rounded w-1/2 mb-4"></div>
+      <div class="h-16 bg-slate-800/60 rounded mb-4"></div>
+      <div class="h-8 bg-slate-800 rounded w-1/3"></div>
+    </div>
+  </div>
+
+  <!-- State 2: Empty State Container -->
+  <div id="empty-state" class="hidden text-center py-16 px-4 rounded-2xl bg-slate-900/40 border border-slate-800/80">
+    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-800/80 text-slate-400 mb-4">
+      <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </div>
+    <h3 class="text-base font-semibold text-white mb-1">Không tìm thấy vị trí tuyển dụng phù hợp</h3>
+    <p class="text-sm text-slate-400 max-w-md mx-auto mb-6">
+      Không có tin tuyển dụng nào khớp với từ khóa và bộ lọc hiện tại. Thử xóa bớt bộ lọc hoặc gõ từ khóa khác như "CCNA", "Linux", "Docker".
+    </p>
+    <button
+      type="button"
+      id="empty-reset-btn"
+      class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-colors min-h-[44px]"
+    >
+      <span>Khôi phục tất cả bộ lọc</span>
+    </button>
+  </div>
+
+  <!-- State 3: Error State Container -->
+  <div id="error-state" class="hidden p-6 rounded-2xl bg-rose-950/30 border border-rose-800/50 text-center mb-6">
+    <div class="text-rose-400 font-semibold mb-2 flex items-center justify-center gap-2">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>
+      <span>Có lỗi xảy ra khi tải danh sách tin tuyển dụng</span>
+    </div>
+    <p class="text-xs text-rose-300/80 mb-4">Không thể kết nối đến cơ sở dữ liệu tĩnh `jobs.json`. Vui lòng kiểm tra lại kết nối mạng.</p>
+    <button
+      type="button"
+      id="retry-fetch-btn"
+      class="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-medium min-h-[44px]"
+    >
+      Thử tải lại
+    </button>
+  </div>
+
+  <!-- State 4: Success State Container (Cards Grid) -->
+  <div id="jobs-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- Rendered dynamically by Client-side JS -->
+  </div>
+</div>
+
+<script>
+  // Client-side Application Logic
+  document.addEventListener('DOMContentLoaded', () => {
+    const appEl = document.getElementById('radar-app');
+    if (!appEl) return;
+
+    let allJobs = [];
+    try {
+      allJobs = JSON.parse(appEl.dataset.initialJobs || '[]');
+    } catch (e) {
+      console.error('Failed to parse initial jobs:', e);
+    }
+
+    const state = {
+      search: '',
+      role: 'all',
+      location: 'all',
+      level: 'all',
+      sortBy: 'relevance'
+    };
+
+    // DOM Elements
+    const searchInput = document.getElementById('radar-search-input') as HTMLInputElement;
+    const clearSearchBtn = document.getElementById('clear-search-btn');
+    const sortSelect = document.getElementById('sort-select') as HTMLSelectElement;
+    const jobsContainer = document.getElementById('jobs-container');
+    const emptyState = document.getElementById('empty-state');
+    const loadingState = document.getElementById('loading-state');
+    const errorState = document.getElementById('error-state');
+    const resultsCount = document.getElementById('results-count');
+    const resetAllBtn = document.getElementById('reset-all-filters-btn');
+    const emptyResetBtn = document.getElementById('empty-reset-btn');
+
+    // Role badge color mapping
+    const roleBadges: Record<string, { label: string; color: string }> = {
+      network: { label: 'Network Engineer', color: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' },
+      helpdesk: { label: 'IT Helpdesk', color: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30' },
+      sysadmin: { label: 'SysAdmin', color: 'bg-purple-500/15 text-purple-300 border-purple-500/30' },
+      devops: { label: 'DevOps & SRE', color: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30' },
+      cloud: { label: 'Cloud Engineer', color: 'bg-sky-500/15 text-sky-300 border-sky-500/30' },
+      security_soc: { label: 'SOC Security', color: 'bg-rose-500/15 text-rose-300 border-rose-500/30' }
+    };
+
+    const locationLabels: Record<string, string> = {
+      ha_noi: 'Hà Nội',
+      ho_chi_minh: 'TP.HCM',
+      da_nang: 'Đà Nẵng',
+      remote: 'Remote',
+      hybrid: 'Hybrid',
+      other: 'Toàn quốc'
+    };
+
+    function renderJobs() {
+      if (!jobsContainer) return;
+
+      // Filter Logic
+      const filtered = allJobs.filter((job: any) => {
+        // Search Filter
+        if (state.search.trim()) {
+          const q = state.search.toLowerCase().trim();
+          const matchTitle = job.title.toLowerCase().includes(q);
+          const matchCompany = job.company?.name?.toLowerCase().includes(q);
+          const matchDesc = job.description_summary?.toLowerCase().includes(q);
+          const matchSkill = job.skills?.some((s: string) => s.toLowerCase().includes(q));
+          if (!matchTitle && !matchCompany && !matchDesc && !matchSkill) {
+            return false;
+          }
+        }
+
+        // Role Filter
+        if (state.role !== 'all' && job.role_category !== state.role) {
+          return false;
+        }
+
+        // Location Filter
+        if (state.location !== 'all') {
+          const locValues = (job.locations || []).map((l: any) => typeof l === 'string' ? l : l.value);
+          if (!locValues.includes(state.location)) {
+            return false;
+          }
+        }
+
+        // Level Filter
+        if (state.level !== 'all' && job.experience_level !== state.level) {
+          return false;
+        }
+
+        return true;
+      });
+
+      // Sorting
+      if (state.sortBy === 'newest') {
+        filtered.sort((a: any, b: any) => new Date(b.posted_at).getTime() - new Date(a.posted_at).getTime());
+      } else {
+        filtered.sort((a: any, b: any) => (b.relevance_score || 80) - (a.relevance_score || 80));
+      }
+
+      if (resultsCount) {
+        resultsCount.textContent = filtered.length.toString();
+      }
+
+      if (filtered.length === 0) {
+        jobsContainer.innerHTML = '';
+        emptyState?.classList.remove('hidden');
+        return;
+      }
+
+      emptyState?.classList.add('hidden');
+
+      // Generate HTML cards
+      jobsContainer.innerHTML = filtered.map((job: any) => {
+        const roleInfo = roleBadges[job.role_category] || { label: job.role_category, color: 'bg-slate-800 text-slate-300 border-slate-700' };
+        const locsStr = (job.locations || []).map((l: any) => locationLabels[typeof l === 'string' ? l : l.value] || l).join(', ');
+        const expLabel = job.experience_level === 'intern' ? 'Thực tập sinh' : (job.experience_level === 'fresher' ? 'Fresher' : 'Junior');
+        const expColor = job.experience_level === 'intern' ? 'bg-amber-500/15 text-amber-300 border-amber-500/30' : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30';
+
+        const skillsHtml = (job.skills || []).slice(0, 5).map((s: string) => `
+          <button type="button" data-skill-search="${s}" class="skill-pill-click px-2 py-0.5 rounded text-[11px] font-mono bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700/60 hover:border-cyan-500/50 transition-colors">
+            ${s}
+          </button>
+        `).join('');
+
+        return `
+          <article class="flex flex-col justify-between p-5 rounded-xl bg-slate-900/60 hover:bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition-all duration-200 group shadow-lg">
+            <div>
+              <!-- Header badges -->
+              <div class="flex items-center justify-between gap-2 mb-2.5">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="px-2.5 py-0.5 rounded-md text-[11px] font-medium border ${roleInfo.color}">
+                    ${roleInfo.label}
+                  </span>
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-medium border ${expColor}">
+                    ${expLabel}
+                  </span>
+                </div>
+                <span class="text-[11px] font-mono text-emerald-400 font-semibold bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-800/40">
+                  🎯 ${job.relevance_score || 90}% Match
+                </span>
+              </div>
+
+              <!-- Title -->
+              <h3 class="text-base font-bold text-white group-hover:text-emerald-400 transition-colors line-clamp-2 mb-1">
+                ${job.title}
+              </h3>
+
+              <!-- Company & Location -->
+              <div class="flex items-center gap-2 text-xs text-slate-300 mb-3">
+                <span class="font-semibold text-slate-200">${job.company?.name || 'Công ty Công Nghệ'}</span>
+                <span class="text-slate-600">•</span>
+                <span class="flex items-center gap-1 text-slate-400">
+                  <svg class="w-3.5 h-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  </svg>
+                  ${locsStr}
+                </span>
+              </div>
+
+              <!-- Summary -->
+              <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed mb-4">
+                ${job.description_summary}
+              </p>
+
+              <!-- Skill Pills -->
+              <div class="flex flex-wrap gap-1.5 mb-4">
+                ${skillsHtml}
+              </div>
+            </div>
+
+            <!-- Card Footer: Salary & Action -->
+            <div class="pt-3 border-t border-slate-800/60 flex items-center justify-between gap-2 mt-auto">
+              <div class="flex flex-col">
+                <span class="text-[10px] text-slate-500 uppercase tracking-wider font-mono">Mức lương</span>
+                <span class="text-xs font-bold text-slate-200 font-mono">${job.salary?.display_text || 'Thỏa thuận'}</span>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] text-slate-500 font-mono hidden sm:inline">${job.source_platform}</span>
+                <a
+                  href="${job.source_url}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1 px-3.5 py-2 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-slate-950 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 min-h-[38px]"
+                  aria-label="Ứng tuyển ${job.title}"
+                >
+                  <span>Xem Tin</span>
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      // Add click listener for skill pills inside cards
+      document.querySelectorAll('.skill-pill-click').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          const target = e.currentTarget as HTMLElement;
+          const skill = target.dataset.skillSearch;
+          if (skill && searchInput) {
+            searchInput.value = skill;
+            state.search = skill;
+            clearSearchBtn?.classList.remove('hidden');
+            renderJobs();
+          }
+        });
+      });
+    }
+
+    // Search Input Debounce Event
+    let debounceTimer: any;
+    searchInput?.addEventListener('input', (e) => {
+      clearTimeout(debounceTimer);
+      const val = (e.target as HTMLInputElement).value;
+      state.search = val;
+      if (val) {
+        clearSearchBtn?.classList.remove('hidden');
+      } else {
+        clearSearchBtn?.classList.add('hidden');
+      }
+      debounceTimer = setTimeout(() => {
+        renderJobs();
+      }, 100);
+    });
+
+    clearSearchBtn?.addEventListener('click', () => {
+      if (searchInput) {
+        searchInput.value = '';
+        state.search = '';
+        clearSearchBtn.classList.add('hidden');
+        renderJobs();
+        searchInput.focus();
+      }
+    });
+
+    // Role Pills Click Event
+    document.querySelectorAll('#role-filters button').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('#role-filters button').forEach((b) => {
+          b.classList.remove('active', 'bg-emerald-500', 'text-slate-950');
+          b.classList.add('bg-slate-800', 'text-slate-300');
+        });
+        const target = e.currentTarget as HTMLElement;
+        target.classList.add('active', 'bg-emerald-500', 'text-slate-950');
+        target.classList.remove('bg-slate-800', 'text-slate-300');
+        state.role = target.dataset.role || 'all';
+        renderJobs();
+      });
+    });
+
+    // Location Pills Click Event
+    document.querySelectorAll('#location-filters button').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('#location-filters button').forEach((b) => {
+          b.classList.remove('active', 'bg-slate-700', 'text-white');
+          b.classList.add('bg-slate-800/80', 'text-slate-300');
+        });
+        const target = e.currentTarget as HTMLElement;
+        target.classList.add('active', 'bg-slate-700', 'text-white');
+        target.classList.remove('bg-slate-800/80', 'text-slate-300');
+        state.location = target.dataset.loc || 'all';
+        renderJobs();
+      });
+    });
+
+    // Level Click Event
+    document.querySelectorAll('#level-filters button').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('#level-filters button').forEach((b) => {
+          b.classList.remove('active', 'text-emerald-400', 'underline');
+          b.classList.add('text-slate-400');
+        });
+        const target = e.currentTarget as HTMLElement;
+        target.classList.add('active', 'text-emerald-400', 'underline');
+        target.classList.remove('text-slate-400');
+        state.level = target.dataset.level || 'all';
+        renderJobs();
+      });
+    });
+
+    // Sort Event
+    sortSelect?.addEventListener('change', (e) => {
+      state.sortBy = (e.target as HTMLSelectElement).value;
+      renderJobs();
+    });
+
+    // Skill Tag click from outside (SkillTrends banner)
+    document.querySelectorAll('[data-skill-filter]').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        const skill = (e.currentTarget as HTMLElement).dataset.skillFilter;
+        if (skill && searchInput) {
+          searchInput.value = skill;
+          state.search = skill;
+          clearSearchBtn?.classList.remove('hidden');
+          renderJobs();
+          window.scrollTo({ top: appEl.offsetTop - 80, behavior: 'smooth' });
+        }
+      });
+    });
+
+    function resetFilters() {
+      state.search = '';
+      state.role = 'all';
+      state.location = 'all';
+      state.level = 'all';
+      state.sortBy = 'relevance';
+
+      if (searchInput) searchInput.value = '';
+      clearSearchBtn?.classList.add('hidden');
+      if (sortSelect) sortSelect.value = 'relevance';
+
+      // Reset role buttons
+      document.querySelectorAll('#role-filters button').forEach((b: any) => {
+        if (b.dataset.role === 'all') {
+          b.classList.add('active', 'bg-emerald-500', 'text-slate-950');
+          b.classList.remove('bg-slate-800', 'text-slate-300');
+        } else {
+          b.classList.remove('active', 'bg-emerald-500', 'text-slate-950');
+          b.classList.add('bg-slate-800', 'text-slate-300');
+        }
+      });
+
+      // Reset location buttons
+      document.querySelectorAll('#location-filters button').forEach((b: any) => {
+        if (b.dataset.loc === 'all') {
+          b.classList.add('active', 'bg-slate-700', 'text-white');
+          b.classList.remove('bg-slate-800/80', 'text-slate-300');
+        } else {
+          b.classList.remove('active', 'bg-slate-700', 'text-white');
+          b.classList.add('bg-slate-800/80', 'text-slate-300');
+        }
+      });
+
+      renderJobs();
+    }
+
+    resetAllBtn?.addEventListener('click', resetFilters);
+    emptyResetBtn?.addEventListener('click', resetFilters);
+
+    // Initial render
+    renderJobs();
+  });
+</script>

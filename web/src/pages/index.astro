@@ -1,0 +1,46 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import RadarMetricsBanner from '../components/RadarMetricsBanner.astro';
+import SkillTrends from '../components/SkillTrends.astro';
+import RadarApp from '../components/RadarApp.astro';
+import Footer from '../components/Footer.astro';
+
+import type { JobPost, RadarMetrics } from '../types/job';
+import rawJobs from '../../../data/jobs.json';
+import rawMetrics from '../../../data/metrics.json';
+
+const jobs = rawJobs as unknown as JobPost[];
+const metrics = rawMetrics as unknown as RadarMetrics;
+---
+
+<Layout>
+  <Navbar totalJobs={metrics.total_active_jobs} />
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <!-- Hero / Headline Section -->
+    <div class="mb-6 sm:mb-8 text-center sm:text-left">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-medium mb-3">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 radar-beacon"></span>
+        Hệ Thống Săn Tin Tuyển Dụng Tự Động Hóa 100%
+      </div>
+      <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight mb-2">
+        Radar Tuyển Dụng Thực Tập & Fresher Tech
+      </h1>
+      <p class="text-sm sm:text-base text-slate-400 max-w-3xl leading-relaxed">
+        Cổng thông tin tự động thu thập từ cổng tuyển dụng chính thức của các tập đoàn Viễn thông & Công nghệ hàng đầu (FPT, Viettel, CMC, VNG...), lọc trùng thông minh và loại bỏ triệt để các tin yêu cầu Seniority cao.
+      </p>
+    </div>
+
+    <!-- Metrics Cards Banner -->
+    <RadarMetricsBanner metrics={metrics} />
+
+    <!-- Skill Trends Bar -->
+    <SkillTrends topSkills={metrics.top_skills} />
+
+    <!-- Interactive Radar Application Island -->
+    <RadarApp initialJobs={jobs} />
+  </main>
+
+  <Footer lastUpdated={metrics.last_updated} />
+</Layout>

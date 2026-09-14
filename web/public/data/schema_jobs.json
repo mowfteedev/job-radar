@@ -1,0 +1,514 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VNTechJobRadarSchemas",
+  "definitions": {
+    "JobPost": {
+      "$defs": {
+        "CompanyInfo": {
+          "description": "Standardized company metadata.",
+          "properties": {
+            "name": {
+              "description": "Company name",
+              "minLength": 1,
+              "title": "Name",
+              "type": "string"
+            },
+            "normalized_name": {
+              "description": "Lowercase trimmed company name for matching",
+              "title": "Normalized Name",
+              "type": "string"
+            },
+            "logo_url": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Company logo image URL",
+              "title": "Logo Url"
+            },
+            "website": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Company website URL",
+              "title": "Website"
+            },
+            "location": {
+              "$ref": "#/$defs/LocationCategory",
+              "default": "other"
+            },
+            "address": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Detailed office address",
+              "title": "Address"
+            }
+          },
+          "required": [
+            "name",
+            "normalized_name"
+          ],
+          "title": "CompanyInfo",
+          "type": "object"
+        },
+        "ExperienceLevel": {
+          "description": "Target candidate experience levels.",
+          "enum": [
+            "intern",
+            "fresher",
+            "junior"
+          ],
+          "title": "ExperienceLevel",
+          "type": "string"
+        },
+        "JobStatus": {
+          "description": "Lifecycle status of a job post.",
+          "enum": [
+            "active",
+            "expired",
+            "closed"
+          ],
+          "title": "JobStatus",
+          "type": "string"
+        },
+        "LocationCategory": {
+          "description": "Normalized workplace locations in Vietnam.",
+          "enum": [
+            "ha_noi",
+            "ho_chi_minh",
+            "da_nang",
+            "remote",
+            "hybrid",
+            "other"
+          ],
+          "title": "LocationCategory",
+          "type": "string"
+        },
+        "RoleCategory": {
+          "description": "Core tech specializations tracked by Job Radar.",
+          "enum": [
+            "network",
+            "helpdesk",
+            "sysadmin",
+            "devops",
+            "cloud",
+            "security_soc"
+          ],
+          "title": "RoleCategory",
+          "type": "string"
+        },
+        "SalaryInfo": {
+          "description": "Standardized salary information.",
+          "properties": {
+            "currency": {
+              "default": "VND",
+              "description": "Currency code (VND, USD)",
+              "title": "Currency",
+              "type": "string"
+            },
+            "min_amount": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Minimum salary amount",
+              "title": "Min Amount"
+            },
+            "max_amount": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Maximum salary amount",
+              "title": "Max Amount"
+            },
+            "is_negotiable": {
+              "default": true,
+              "description": "True if salary is negotiable or undisclosed",
+              "title": "Is Negotiable",
+              "type": "boolean"
+            },
+            "display_text": {
+              "default": "Thỏa thuận",
+              "description": "Human-friendly salary display string",
+              "title": "Display Text",
+              "type": "string"
+            }
+          },
+          "title": "SalaryInfo",
+          "type": "object"
+        },
+        "WorkType": {
+          "description": "Employment arrangement.",
+          "enum": [
+            "full_time",
+            "part_time",
+            "internship",
+            "contract"
+          ],
+          "title": "WorkType",
+          "type": "string"
+        }
+      },
+      "description": "Core Job Post entity for the Radar pipeline.",
+      "properties": {
+        "id": {
+          "description": "Unique job identifier (e.g. SHA256 prefix or platform slug)",
+          "title": "Id",
+          "type": "string"
+        },
+        "canonical_hash": {
+          "description": "Deduplication hash (company + title + location)",
+          "title": "Canonical Hash",
+          "type": "string"
+        },
+        "title": {
+          "description": "Job title",
+          "minLength": 3,
+          "title": "Title",
+          "type": "string"
+        },
+        "company": {
+          "$ref": "#/$defs/CompanyInfo",
+          "description": "Hiring company details"
+        },
+        "role_category": {
+          "$ref": "#/$defs/RoleCategory",
+          "description": "Primary technical domain"
+        },
+        "experience_level": {
+          "$ref": "#/$defs/ExperienceLevel",
+          "description": "Seniority level (intern, fresher, junior)"
+        },
+        "skills": {
+          "description": "Extracted skill tags (e.g. CCNA, Docker, Linux)",
+          "items": {
+            "type": "string"
+          },
+          "title": "Skills",
+          "type": "array"
+        },
+        "locations": {
+          "description": "Work locations",
+          "items": {
+            "$ref": "#/$defs/LocationCategory"
+          },
+          "minItems": 1,
+          "title": "Locations",
+          "type": "array"
+        },
+        "salary": {
+          "$ref": "#/$defs/SalaryInfo",
+          "description": "Salary details"
+        },
+        "source_url": {
+          "description": "Direct link to original job posting",
+          "title": "Source Url",
+          "type": "string"
+        },
+        "source_platform": {
+          "description": "Source platform name (e.g. TopCV, ITviec, FPT, Viettel)",
+          "title": "Source Platform",
+          "type": "string"
+        },
+        "description_summary": {
+          "description": "Brief summary of duties and requirements (< 300 words)",
+          "title": "Description Summary",
+          "type": "string"
+        },
+        "posted_at": {
+          "description": "Original publication timestamp",
+          "format": "date-time",
+          "title": "Posted At",
+          "type": "string"
+        },
+        "scraped_at": {
+          "description": "Scrape timestamp",
+          "format": "date-time",
+          "title": "Scraped At",
+          "type": "string"
+        },
+        "expires_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Expiration date (TTL)",
+          "title": "Expires At"
+        },
+        "status": {
+          "$ref": "#/$defs/JobStatus",
+          "default": "active",
+          "description": "Active status"
+        },
+        "relevance_score": {
+          "default": 80,
+          "description": "Quality & relevancy score (0-100)",
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Relevance Score",
+          "type": "integer"
+        },
+        "work_type": {
+          "$ref": "#/$defs/WorkType",
+          "default": "full_time"
+        }
+      },
+      "required": [
+        "id",
+        "canonical_hash",
+        "title",
+        "company",
+        "role_category",
+        "experience_level",
+        "locations",
+        "source_url",
+        "source_platform",
+        "description_summary",
+        "posted_at"
+      ],
+      "title": "JobPost",
+      "type": "object"
+    },
+    "RadarMetrics": {
+      "$defs": {
+        "SkillFrequency": {
+          "description": "Aggregated metrics for a single skill.",
+          "properties": {
+            "skill": {
+              "title": "Skill",
+              "type": "string"
+            },
+            "count": {
+              "title": "Count",
+              "type": "integer"
+            },
+            "percentage": {
+              "title": "Percentage",
+              "type": "number"
+            },
+            "category": {
+              "default": "general",
+              "description": "network, devops, system, cloud, etc.",
+              "title": "Category",
+              "type": "string"
+            }
+          },
+          "required": [
+            "skill",
+            "count",
+            "percentage"
+          ],
+          "title": "SkillFrequency",
+          "type": "object"
+        }
+      },
+      "description": "Aggregated statistics for the Radar Dashboard.",
+      "properties": {
+        "last_updated": {
+          "format": "date-time",
+          "title": "Last Updated",
+          "type": "string"
+        },
+        "total_active_jobs": {
+          "default": 0,
+          "title": "Total Active Jobs",
+          "type": "integer"
+        },
+        "fresh_jobs_24h": {
+          "default": 0,
+          "title": "Fresh Jobs 24H",
+          "type": "integer"
+        },
+        "jobs_by_role": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Jobs By Role",
+          "type": "object"
+        },
+        "jobs_by_location": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Jobs By Location",
+          "type": "object"
+        },
+        "top_skills": {
+          "items": {
+            "$ref": "#/$defs/SkillFrequency"
+          },
+          "title": "Top Skills",
+          "type": "array"
+        }
+      },
+      "title": "RadarMetrics",
+      "type": "object"
+    },
+    "CompanyInfo": {
+      "$defs": {
+        "LocationCategory": {
+          "description": "Normalized workplace locations in Vietnam.",
+          "enum": [
+            "ha_noi",
+            "ho_chi_minh",
+            "da_nang",
+            "remote",
+            "hybrid",
+            "other"
+          ],
+          "title": "LocationCategory",
+          "type": "string"
+        }
+      },
+      "description": "Standardized company metadata.",
+      "properties": {
+        "name": {
+          "description": "Company name",
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "normalized_name": {
+          "description": "Lowercase trimmed company name for matching",
+          "title": "Normalized Name",
+          "type": "string"
+        },
+        "logo_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Company logo image URL",
+          "title": "Logo Url"
+        },
+        "website": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Company website URL",
+          "title": "Website"
+        },
+        "location": {
+          "$ref": "#/$defs/LocationCategory",
+          "default": "other"
+        },
+        "address": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Detailed office address",
+          "title": "Address"
+        }
+      },
+      "required": [
+        "name",
+        "normalized_name"
+      ],
+      "title": "CompanyInfo",
+      "type": "object"
+    },
+    "SalaryInfo": {
+      "description": "Standardized salary information.",
+      "properties": {
+        "currency": {
+          "default": "VND",
+          "description": "Currency code (VND, USD)",
+          "title": "Currency",
+          "type": "string"
+        },
+        "min_amount": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Minimum salary amount",
+          "title": "Min Amount"
+        },
+        "max_amount": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Maximum salary amount",
+          "title": "Max Amount"
+        },
+        "is_negotiable": {
+          "default": true,
+          "description": "True if salary is negotiable or undisclosed",
+          "title": "Is Negotiable",
+          "type": "boolean"
+        },
+        "display_text": {
+          "default": "Thỏa thuận",
+          "description": "Human-friendly salary display string",
+          "title": "Display Text",
+          "type": "string"
+        }
+      },
+      "title": "SalaryInfo",
+      "type": "object"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+---
+import type { SkillFrequency } from '../types/job';
+
+interface Props {
+  topSkills: SkillFrequency[];
+}
+
+const { topSkills = [] } = Astro.props;
+---
+
+<div class="p-5 rounded-xl bg-slate-900/60 border border-slate-800/80 mb-6">
+  <div class="flex items-center justify-between mb-3">
+    <div class="flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+      <h3 class="text-sm font-semibold text-white tracking-wide">Xu Hướng Kỹ Năng Fresher Săn Đón (Skill Radar)</h3>
+    </div>
+    <span class="text-xs text-slate-400 font-mono">Bấm vào kỹ năng để lọc</span>
+  </div>
+
+  <div class="flex flex-wrap gap-2">
+    {topSkills.map((s) => (
+      <button
+        type="button"
+        data-skill-filter={s.skill}
+        class="skill-tag-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 hover:border-cyan-500/50 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 cursor-pointer min-h-[36px]"
+      >
+        <span class="text-cyan-400">#</span>{s.skill}
+        <span class="px-1.5 py-0.2 rounded text-[10px] bg-slate-900 text-slate-400 border border-slate-700/50">
+          {s.percentage}%
+        </span>
+      </button>
+    ))}
+  </div>
+</div>

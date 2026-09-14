@@ -1,0 +1,70 @@
+---
+import type { RadarMetrics } from '../types/job';
+
+interface Props {
+  metrics: RadarMetrics;
+}
+
+const { metrics } = Astro.props;
+
+const netJobs = (metrics.jobs_by_role['network'] || 0) + (metrics.jobs_by_role['helpdesk'] || 0);
+const devopsJobs = (metrics.jobs_by_role['devops'] || 0) + (metrics.jobs_by_role['cloud'] || 0) + (metrics.jobs_by_role['sysadmin'] || 0);
+---
+
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 my-6">
+  <!-- Card 1: Active Jobs -->
+  <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-emerald-500/40 transition-colors">
+    <div class="flex items-center justify-between text-slate-400 mb-1">
+      <span class="text-xs font-medium uppercase tracking-wider">Tin Đang Mở</span>
+      <span class="p-1 rounded bg-emerald-500/10 text-emerald-400">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+      </span>
+    </div>
+    <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono">{metrics.total_active_jobs}</div>
+    <div class="text-[11px] text-emerald-400 font-mono mt-1">● Tự động dọn sau 30 ngày</div>
+  </div>
+
+  <!-- Card 2: Fresh 24h -->
+  <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-cyan-500/40 transition-colors">
+    <div class="flex items-center justify-between text-slate-400 mb-1">
+      <span class="text-xs font-medium uppercase tracking-wider">Mới Trong 24H</span>
+      <span class="p-1 rounded bg-cyan-500/10 text-cyan-400">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </span>
+    </div>
+    <div class="text-2xl sm:text-3xl font-extrabold text-cyan-400 font-mono">{metrics.fresh_jobs_24h}</div>
+    <div class="text-[11px] text-slate-400 font-mono mt-1">Cập nhật 06:00 & 18:00</div>
+  </div>
+
+  <!-- Card 3: Network & NOC -->
+  <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-indigo-500/40 transition-colors">
+    <div class="flex items-center justify-between text-slate-400 mb-1">
+      <span class="text-xs font-medium uppercase tracking-wider">Mạng & NOC / Support</span>
+      <span class="p-1 rounded bg-indigo-500/10 text-indigo-400">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+        </svg>
+      </span>
+    </div>
+    <div class="text-2xl sm:text-3xl font-extrabold text-indigo-300 font-mono">{netJobs}</div>
+    <div class="text-[11px] text-slate-400 font-mono mt-1">CCNA • LAN/WAN • Viễn thông</div>
+  </div>
+
+  <!-- Card 4: DevOps & Cloud -->
+  <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-amber-500/40 transition-colors">
+    <div class="flex items-center justify-between text-slate-400 mb-1">
+      <span class="text-xs font-medium uppercase tracking-wider">Cloud, SysAdmin & DevOps</span>
+      <span class="p-1 rounded bg-amber-500/10 text-amber-400">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z" />
+        </svg>
+      </span>
+    </div>
+    <div class="text-2xl sm:text-3xl font-extrabold text-amber-400 font-mono">{devopsJobs}</div>
+    <div class="text-[11px] text-slate-400 font-mono mt-1">Docker • K8s • Linux • AWS</div>
+  </div>
+</div>

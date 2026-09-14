@@ -1,0 +1,11 @@
+{
+  "name": "job-radar-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "web:dev": "npm --prefix web run dev",
+    "web:build": "npm --prefix web run build",
+    "web:preview": "npm --prefix web run preview",
+    "web:test": "npm --prefix web run test:ui"
+  }
+}
