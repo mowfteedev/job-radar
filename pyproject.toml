@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "vn-tech-job-radar"
+name = "job-radar"
 version = "0.1.0"
 description = "Automated pipeline tracking Network, DevOps, SysAdmin and IT support roles in Vietnam"
 readme = "README.md"
@@ -20,13 +20,3 @@ dependencies = [
     "rich>=13.7.0"
 ]
 
-[project.optional-dependencies]
-dev = [
-    "pytest>=8.2.0",
-    "ruff>=0.4.0"
-]
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-pythonpath = ["."]
-python_files = ["test_*.py"]

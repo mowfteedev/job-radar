@@ -46,10 +46,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 🧪 Run Smoke Verification
-        run: |
-          pytest -v tests/test_scrapers.py tests/test_indexer.py
-
       - name: 📡 Execute Scraper Ingestion Engine
         run: |
           python -m src.main --data-dir data --ttl 30

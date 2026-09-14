@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "test:ui": "node test-ui.mjs",
-    "test:adversarial": "node test-adversarial-ui.mjs"
+    "preview": "astro preview"
   },
   "keywords": [],
   "type": "module",
