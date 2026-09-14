@@ -121,6 +121,15 @@ class JobPost(BaseModel):
     def clean_title(cls, v: str) -> str:
         return re.sub(r"\s+", " ", v).strip()
 
+    @field_validator("source_url")
+    @classmethod
+    def validate_safe_url(cls, v: str) -> str:
+        from src.security.sanitizer import validate_and_sanitize_url
+        clean = validate_and_sanitize_url(v)
+        if not clean:
+            raise ValueError(f"Insecure, malicious or invalid source_url: {v}")
+        return clean
+
 
 class SkillFrequency(BaseModel):
     """Aggregated metrics for a single skill."""
